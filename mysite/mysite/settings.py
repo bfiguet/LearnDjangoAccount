@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,18 +28,22 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+if DEBUG:
+	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # During development only
 
 # Application definition
 
 INSTALLED_APPS = [
+	'personal',
+	'account',
+	'friend',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'personal',
-	'account',
+	
 ]
 
 MIDDLEWARE = [
@@ -70,6 +75,10 @@ TEMPLATES = [
 ]
 
 AUTH_USER_MODEL = 'account.Account'
+AUTHENTICATION_BACKENDS = (
+	'django.contrib.auth.backends.AllowAllUsersModelBackend',
+	'account.backends.CaseInsensitiveModelBackend',
+	)
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
@@ -120,6 +129,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+IMAGE_URL = 'images/'
+IMAGE_ROOT = os.path.join(BASE_DIR, 'images')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TEMPLATES = os.path.join(BASE_DIR, 'templates')
+BASE_URL = 'http://127.0.0.1:8000/'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 # (10MB) 10*1024*1024
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
