@@ -46,18 +46,18 @@ def account_view(request, *args, **kwargs):
 		
 		# Define state template variables
 
-		if_self = True
-		if_friend = False
+		is_self = True
+		is_friend = False
 		user = request.user
 		if user.is_authenticated and user != account:
-			if_self = False
+			is_self = False
 			if user.friends_list.is_mutual_friend(account):
-				if_friend = True
+				is_friend = True
 		elif not user.is_authenticated:
-			if_self = False
+			is_self = False
 
-		context['if_self'] = if_self
-		context['if_friend'] = if_friend
+		context['is_self'] = is_self
+		context['is_friend'] = is_friend
 		context['BASE_URL'] = settings.BASE_URL
 
 	return render(request, 'account/account.html', context)
